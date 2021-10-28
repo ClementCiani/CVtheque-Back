@@ -27,36 +27,29 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
 
-    registration:
-      pattern: ^/api/users
-      stateless: true
-      anonymous: false
-      methods: [POST]
-  
-
+   
     login:
       pattern: ^/api/login
-      provider: app_users
       stateless: true
-      anonymous: false
+      provider: 'candidate_provider'
       json_login:
-        check_path: /api/login
+        check_path: /api/login # or api_login_check as defined in config/routes.yaml
         username_path: email
         password_path: password
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
     api:
-      pattern: ^/api/
+      pattern:   ^/api
       stateless: true
-      provider: app_users
+      provider: 'app_users'
       guard:
         authenticators:
           - lexik_jwt_authentication.jwt_token_authenticator
 
     main:
       stateless: true
-      anonymous: false
+      # anonymous: lazy
       lazy: true
       provider: candidate_provider
 
@@ -74,3 +67,4 @@ security:
 
     - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/candidates, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/cvs, roles: IS_AUTHENTICATED_FULLY }
