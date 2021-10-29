@@ -9,14 +9,22 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraint as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=CvRepository::class)
  * @ApiFilter(SearchFilter::class, properties={"title":"partial", "formation":"partial", "experiences":"partial", "skills":"partial"})
  */
+#[ApiResource(
+    normalizationContext: ["groups" => [
+        "cvread"
+    ]],
+    denormalizationContext: ["groups" => [
+        "cvwrite"
+    ]]
+)]
 class Cv
 {
     /**
@@ -29,31 +37,37 @@ class Cv
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["cvread", "cvwrite"])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["cvread", "cvwrite"])]
     private $urlPerso;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["cvread", "cvwrite"])]
     private $video;
 
     /**
      * @ORM\OneToMany(targetEntity=Formations::class, mappedBy="cv")
      */
+    #[Groups(["cvread", "cvwrite"])]
     private $formation;
 
     /**
      * @ORM\OneToMany(targetEntity=Experiences::class, mappedBy="cv")
      */
+    #[Groups(["cvread", "cvwrite"])]
     private $experiences;
 
     /**
      * @ORM\OneToMany(targetEntity=Skills::class, mappedBy="cv")
      */
+    #[Groups(["cvread", "cvwrite"])]
     private $skills;
 
     public function __construct()

@@ -49,7 +49,6 @@ security:
 
     main:
       stateless: true
-      # anonymous: lazy
       lazy: true
       provider: candidate_provider
 

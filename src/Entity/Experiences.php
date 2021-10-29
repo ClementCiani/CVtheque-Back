@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ExperiencesRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraint as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
@@ -26,31 +27,37 @@ class Experiences
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["cvread"])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["cvread"])]
     private $company;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["cvread"])]
     private $city;
 
     /**
      * @ORM\Column(type="datetime")
      */
+
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
      */
+
     private $endDate;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["cvread"])]
     private $description;
 
     /**
