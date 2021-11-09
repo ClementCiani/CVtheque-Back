@@ -3,32 +3,40 @@
 namespace App\Entity;
 
 
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Cv;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CandidateRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ApiResource(
  *        collectionOperations={
- *        "get"= {},
- *        "post"={}
+ *        "get"= {"access_control"="is_granted('ROLE_ADMIN')"},
+ *        "post"={"access_control"="is_granted('ROLE_USER')"},
  *       },
  *        itemOperations={
- *        "get"={},
- *        "put"={},
- *        "delete"={}
+ *        "get"={"access_control"="is_granted('ROLE_USER')"},
+ *        "put"={"access_control"="is_granted('ROLE_USER')"},
+ *        "delete"={"access_control"="is_granted('ROLE_ADMIN')"},
  *       },
  *        normalizationContext={"groups"={"user:read"}},
  *        denormalizationContext={"groups"={"user:write"}})
  * @ORM\Entity(repositoryClass=CandidateRepository::class)
- * 
+ * @ApiFilter(SearchFilter::class, properties={"city":"partial", "seekingJobType":"partial", "seekingJobContract":"partial", "availability":"partial"})
  */
+#[ApiResource(
+    normalizationContext: ["groups" => [
+        "candidateread"
+    ]]
+)]
 class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -45,6 +53,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\NotBlank(message="Veuillez fournir un mail")
      * @Assert\Email(message="l'adresse mail doit être dans un format valide")
      */
+    #[Groups(["candidateread"])]
     private $email;
 
     /**
@@ -70,6 +79,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez fournir votre nom de famille")
      */
+    #[Groups(["candidateread"])]
     private $name;
 
     /**
@@ -77,6 +87,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez fournir votre prénom")
      */
+    #[Groups(["candidateread"])]
     private $firstName;
 
     /**
@@ -84,6 +95,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez fournir un numéros de téléphone")
      */
+    #[Groups(["candidateread"])]
     private $phone;
 
     /**
@@ -91,6 +103,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez fournir votre adresse postal")
      */
+    #[Groups(["candidateread"])]
     private $address;
 
     /**
@@ -98,6 +111,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez renseigner votre ville de résidence")
      */
+    #[Groups(["candidateread"])]
     private $city;
 
     /**
@@ -105,6 +119,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez renseigner votre code postal")
      */
+    #[Groups(["candidateread"])]
     private $zip;
 
     /**
@@ -119,6 +134,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez reinseigner le poste rechercher")
      */
+    #[Groups(["candidateread"])]
     private $seekingJobType;
 
     /**
@@ -126,6 +142,7 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez renseigner le type de contrat voulue")
      */
+    #[Groups(["candidateread"])]
     private $seekingJobContract;
 
     /**
@@ -133,12 +150,14 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank(message="Veuillez renseigner vos disponibilités")
      */
+    #[Groups(["candidateread"])]
     private $availability;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"user:read", "user:write"})
      */
+    #[Groups(["candidateread"])]
     private $registrationDate;
 
     /**
@@ -146,12 +165,20 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      * @ApiSubresource
      */
+    #[Groups(["candidateread"])]
     private $cv;
 
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -392,5 +419,10 @@ class Candidate implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = $plainPassword;
 
         return $this;
+    }
+
+    public static function createFromPayload($id, array $payload)
+    {
+        return (new Candidate())->setId($id);
     }
 }

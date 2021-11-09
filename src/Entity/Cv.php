@@ -37,37 +37,37 @@ class Cv
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread", "cvwrite"])]
+    #[Groups(["candidateread", "cvread", "cvwrite"])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread", "cvwrite"])]
+    #[Groups(["candidateread", "cvread", "cvwrite"])]
     private $urlPerso;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread", "cvwrite"])]
+    #[Groups(["candidateread", "cvread", "cvwrite"])]
     private $video;
 
     /**
      * @ORM\OneToMany(targetEntity=Formations::class, mappedBy="cv")
      */
-    #[Groups(["cvread", "cvwrite"])]
+    #[Groups(["candidateread", "cvread"])]
     private $formation;
 
     /**
      * @ORM\OneToMany(targetEntity=Experiences::class, mappedBy="cv")
      */
-    #[Groups(["cvread", "cvwrite"])]
+    #[Groups(["candidateread", "cvread"])]
     private $experiences;
 
     /**
      * @ORM\OneToMany(targetEntity=Skills::class, mappedBy="cv")
      */
-    #[Groups(["cvread", "cvwrite"])]
+    #[Groups(["candidateread", "cvread"])]
     private $skills;
 
     public function __construct()

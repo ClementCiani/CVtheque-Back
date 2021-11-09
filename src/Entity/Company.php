@@ -12,7 +12,17 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraint as Assert;
 
 /**
- * @ApiResource(normalizationContext={"groups"={"user:read"}},
+ * @ApiResource(
+ *          collectionOperations={
+ *              "get"= {"access_control"="is_granted('ROLE_ADMIN')"},
+ *              "post"={"access_control"="is_granted('ROLE_USER')"},
+ *                  },
+ *          itemOperations={
+ *              "get"={"access_control"="is_granted('ROLE_USER')"},
+ *              "put"={"access_control"="is_granted('ROLE_USER')"},
+ *              "delete"={"access_control"="is_granted('ROLE_ADMIN')"},
+ *                  },
+ * normalizationContext={"groups"={"user:read"}},
  *              denormalizationContext={"groups"={"user:write"}})
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
  */

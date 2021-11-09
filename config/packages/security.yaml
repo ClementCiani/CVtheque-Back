@@ -22,6 +22,8 @@ security:
       chain:
         providers: ["candidate_provider", "company_provider"]
     # used to reload user from session & other features (e.g. switch_user)
+    jwt:
+      lexik_jwt: ~
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -31,6 +33,7 @@ security:
     login:
       pattern: ^/api/login
       stateless: true
+      lazy: true
       provider: 'candidate_provider'
       json_login:
         check_path: /api/login # or api_login_check as defined in config/routes.yaml
@@ -42,7 +45,7 @@ security:
     api:
       pattern:   ^/api
       stateless: true
-      provider: 'app_users'
+      provider: jwt
       guard:
         authenticators:
           - lexik_jwt_authentication.jwt_token_authenticator

@@ -27,25 +27,25 @@ class Formations
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $level;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $school;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $city;
 
     /**

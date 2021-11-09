@@ -1,4 +1,5 @@
 api_platform:
+    show_webby: false
     title: 'Symfony REST API'
     description: 'A Symfony API to manage a simple blog app.'
     version: '1.0.0'

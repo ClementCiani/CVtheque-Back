@@ -27,19 +27,19 @@ class Skills
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $level;
 
     /**

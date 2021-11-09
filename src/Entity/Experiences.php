@@ -27,19 +27,19 @@ class Experiences
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $company;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["cvread"])]
+    #[Groups(["candidateread", "cvread"])]
     private $city;
 
     /**
